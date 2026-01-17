@@ -263,14 +263,14 @@ class MainActivity : ComponentActivity() {
                     val programChange = byteArrayOf(0xC0.toByte(), 0)
                     synthInputPort?.send(programChange, 0, programChange.size)
 
-                    var lastEventTime = 0L
+                    val playbackStartTime = System.nanoTime()
                     for (event in midiEvents) {
-                        val delayMs = (event.timestamp - lastEventTime) / 1_000_000
+                        val eventTime = playbackStartTime + event.timestamp
+                        val delayMs = (eventTime - System.nanoTime()) / 1_000_000
                         if (delayMs > 0) {
                             delay(delayMs)
                         }
                         synthInputPort?.send(event.data, 0, event.data.size)
-                        lastEventTime = event.timestamp
                     }
                     delay(500) // Wait a moment for last notes to fade
                 } finally {
@@ -425,9 +425,9 @@ private fun HelpDialog(onDismissRequest: () -> Unit) {
                     ClickableText(
                         text = annotatedString,
                         onClick = {
-                            offset ->
+                                offset ->
                             annotatedString.getStringAnnotations(tag = "URL", start = offset, end = offset).firstOrNull()?.let {
-                                annotation ->
+                                    annotation ->
                                 val intent = Intent(Intent.ACTION_VIEW, annotation.item.toUri())
                                 startActivity(context, intent, null)
                             }
@@ -478,7 +478,7 @@ fun SimpleMidiRecorderApp(
             else -> ButtonGrey
         }
     }
-    
+
     val playButtonColor = if (isPlaying) {
         var targetColor by remember { mutableStateOf(LightOrange) }
         val breathingColor by animateColorAsState(
@@ -503,7 +503,7 @@ fun SimpleMidiRecorderApp(
         .aspectRatio(1f)
 
     Scaffold {
-        innerPadding ->
+            innerPadding ->
         Box(
             modifier = Modifier
                 .fillMaxSize()

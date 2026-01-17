@@ -2,13 +2,15 @@ package com.bunaventure.simplemidirecorder
 
 import java.io.OutputStream
 
+private const val PPQ = 480 // Use a higher PPQ for better timing resolution
+
 fun writeMidiFile(outputStream: OutputStream, midiEvents: List<MidiEvent>) {
     // MIDI File Header
     outputStream.write("MThd".toByteArray())
     outputStream.write(byteArrayOf(0, 0, 0, 6)) // Header length
     outputStream.write(byteArrayOf(0, 0)) // Format 0 (single track)
     outputStream.write(byteArrayOf(0, 1)) // Number of tracks
-    outputStream.write(byteArrayOf(0, 120.toByte())) // Ticks per quarter note (PPQ)
+    outputStream.write(byteArrayOf((PPQ shr 8).toByte(), PPQ.toByte())) // Ticks per quarter note (PPQ)
 
     // Track Header
     outputStream.write("MTrk".toByteArray())
@@ -21,14 +23,26 @@ fun writeMidiFile(outputStream: OutputStream, midiEvents: List<MidiEvent>) {
 fun createTrackData(midiEvents: List<MidiEvent>): ByteArray {
     val trackData = mutableListOf<Byte>()
     var lastTimestamp: Long = 0
+    // Using a standard tempo of 120 bpm
+    val nsPerQuarterNote = 500_000_000L
+
+    // Add Tempo meta-event (0xFF 0x51 0x03 tttttt) for 120 BPM
+    // tttttt is microseconds per quarter-note. 500,000 us for 120 bpm.
+    val tempo = 500000
+    trackData.addAll(writeVariableLengthQuantity(0).toList()) // delta-time 0
+    trackData.add(0xFF.toByte())
+    trackData.add(0x51.toByte())
+    trackData.add(0x03.toByte())
+    trackData.add((tempo shr 16 and 0xFF).toByte())
+    trackData.add((tempo shr 8 and 0xFF).toByte())
+    trackData.add((tempo and 0xFF).toByte())
 
     val sortedEvents = midiEvents.sortedBy { it.timestamp }
 
     sortedEvents.forEach { event ->
         val deltaTime = event.timestamp - lastTimestamp
-        // Convert nanoseconds to ticks. Assuming 120bpm (500,000,000 ns per quarter note)
-        // and 120 ticks per quarter note (PPQ). 1 tick = 4,166,666.66 ns
-        val deltaTimeInTicks = deltaTime / (500_000_000L / 120)
+        // More accurate tick calculation by performing multiplication before division
+        val deltaTimeInTicks = (deltaTime * PPQ) / nsPerQuarterNote
         trackData.addAll(writeVariableLengthQuantity(deltaTimeInTicks).toList())
         trackData.addAll(event.data.toList())
         lastTimestamp = event.timestamp
