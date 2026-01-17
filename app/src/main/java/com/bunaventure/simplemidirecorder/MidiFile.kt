@@ -81,7 +81,3 @@ private fun intToByteArray(value: Int): ByteArray {
         value.toByte()
     )
 }
-
-fun ByteArray.toHexDebugString(): String {
-    return joinToString(" ") { String.format("%02X", it) }
-}
