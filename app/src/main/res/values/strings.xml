@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">Simple MIDI Recorder</string>
+    <string name="app_name_short">MIDI Recorder</string>
+
+    <!-- Help Dialog -->
+    <string name="content_description_help">Help</string>
+    <string name="help_ready_to_record">= Ready to record</string>
+    <string name="help_recording_in_progress">= Recording in progress</string>
+    <string name="help_playback_recording">= Playback recording</string>
+    <string name="help_stop_playback">= Stop playback</string>
+    <string name="help_export_recording">= Export recording</string>
+    <string name="developed_by">Developed by</string>
+    <string name="developer_name">bunaventure</string>
+    <string name="developer_link">https://github.com/bunaventure</string>
+
+    <!-- Toast Messages -->
+    <string name="toast_connect_midi_device">Connect a MIDI device</string>
+    <string name="toast_nothing_to_playback">Nothing to playback</string>
+    <string name="toast_no_synthesizer_found">No synthesizer found on this device</string>
+    <string name="toast_could_not_open_synthesizer">Could not open synthesizer</string>
+    <string name="toast_nothing_to_save">Nothing to save</string>
+</resources>
