@@ -19,4 +19,5 @@
     <string name="toast_no_synthesizer_found">No synthesizer found on this device</string>
     <string name="toast_could_not_open_synthesizer">Could not open synthesizer</string>
     <string name="toast_nothing_to_save">Nothing to save</string>
+    <string name="toast_file_save_error">Could not save file</string>
 </resources>
