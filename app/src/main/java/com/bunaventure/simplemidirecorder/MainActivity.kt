@@ -179,7 +179,7 @@ class MainActivity : ComponentActivity() {
 
     private fun updateDeviceState() {
         val devices = midiManager?.devices
-        isDeviceConnected.value = devices?.any { it.outputPortCount > 0 } == true
+        isDeviceConnected.value = devices?.any { it.type != MidiDeviceInfo.TYPE_VIRTUAL && it.outputPortCount > 0 } == true
         if (!isDeviceConnected.value && isRecording.value) {
             stopRecording()
         }
@@ -211,7 +211,7 @@ class MainActivity : ComponentActivity() {
         hasMidiInput.value = false
         midiEvents.clear()
 
-        val deviceInfo = midiManager?.devices?.firstOrNull { it.outputPortCount > 0 }
+        val deviceInfo = midiManager?.devices?.firstOrNull { it.type != MidiDeviceInfo.TYPE_VIRTUAL && it.outputPortCount > 0 }
         if (deviceInfo != null) {
             midiManager?.openDevice(deviceInfo, { device ->
                 recordDevice = device
