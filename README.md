@@ -9,3 +9,5 @@ It features a basic playback mechanism for the last recorded track. This is inte
 This is app is incredibly simple (perhaps too simple for some). There are existing mobile DAWs that can record USB MIDI, with additional features baked in. This is meant for a certain workflow where you'd like to simply record using your phone or tablet — to save your song ideas, and/or import the .mid file into your desktop DAW afterwards.
 
 Completely free, no ads, no internet connectivity, no permissions required.
+<br><hr>
+<a href="https://www.buymeacoffee.com/bunaventure" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-blue.png" alt="Buy Me a Coffee" style="height: 60px !important;width: 217px !important;" ></a>
